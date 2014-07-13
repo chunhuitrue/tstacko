@@ -1,4 +1,4 @@
-ttcp
+tstacko
 ====
 
-for test stacko tcp.
+clients and servers to test stacko.
