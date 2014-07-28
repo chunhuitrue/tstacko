@@ -9,8 +9,17 @@
 %% Application callbacks
 %% ===================================================================
 
+%% start(_StartType, _StartArgs) ->
+%%     tserver_sup:start_link().
+
 start(_StartType, _StartArgs) ->
-    tserver_sup:start_link().
+    case tserver_sup:start_link() of
+        {ok, Pid} ->
+            %% start acceptors here
+            {ok, Pid};
+        Other ->
+            {error, Other}
+    end.
 
 stop(_State) ->
     ok.

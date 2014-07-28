@@ -3,7 +3,6 @@
 -behaviour(supervisor).
 
 -export([start_link/0]).
-
 -export([init/1]).
 
 %% Helper macro for declaring children of supervisor
