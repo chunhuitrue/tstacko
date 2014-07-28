@@ -1,0 +1,12 @@
+{application, tserver,
+ [
+  {description, ""},
+  {vsn, "1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {mod, { tserver_app, []}},
+  {env, []}
+ ]}.
