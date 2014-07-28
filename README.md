@@ -1,4 +1,4 @@
 tstacko
 ====
 
-clients and servers to test stacko.
+client and server to test stacko.
