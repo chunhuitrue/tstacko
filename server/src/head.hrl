@@ -1,0 +1,3 @@
+-define(PORT, 2345).
+-define(BACKLOG, 1024).
+-define(NUM_ACCEPTOR, 3).
