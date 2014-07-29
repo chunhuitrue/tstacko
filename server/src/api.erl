@@ -19,6 +19,8 @@
 
 -export([accept/1]).
 -export([listen/2]).
+-export([recv/2]).
+-export([controlling_process/2]).
 -export([close/1]).
 
 
@@ -33,6 +35,15 @@ listen(Port, _Opts) ->
                           {packet, raw},
                           {reuseaddr, true}, 
                           {nodelay, true}]).
+
+
+recv(Socket, N) ->
+    gen_tcp:recv(Socket, N).
+
+
+controlling_process(Socket, Pid) ->
+    gen_tcp:controlling_process(Socket, Pid).
+
 
 close(Scoket) ->
     gen_tcp:close(Scoket).
