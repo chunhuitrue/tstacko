@@ -20,6 +20,7 @@
 -export([accept/1]).
 -export([listen/2]).
 -export([recv/2]).
+-export([send/2]).
 -export([controlling_process/2]).
 -export([close/1]).
 
@@ -39,6 +40,10 @@ listen(Port, _Opts) ->
 
 recv(Socket, N) ->
     gen_tcp:recv(Socket, N).
+
+
+send(Socket, Data) ->
+    gen_tcp:send(Socket, Data).
 
 
 controlling_process(Socket, Pid) ->

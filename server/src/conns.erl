@@ -29,10 +29,10 @@ start_link(ConnSocket) ->
 
 
 loop(ConnSocket) ->
-    io:format("into loop~n"),
     case api:recv(ConnSocket, ?ECHO_SIZE) of
         {ok, Data} ->
             io:format("conn: ~p received data: ~p~n",[self(), Data]),
+            api:send(ConnSocket, Data),
             loop(ConnSocket);
         {error, Reason} ->
             io:format("conn: ~p received error: ~p~n",[self(), Reason]),

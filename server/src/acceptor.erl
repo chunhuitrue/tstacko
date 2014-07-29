@@ -27,9 +27,7 @@ start_link(ListenSocket) ->
 loop(ListenSocket) ->
     case api:accept(ListenSocket) of
         {ok, ConnSocket} ->
-            io:format("accept a socket. start_child ConnSocket: ~p~n", [ConnSocket]),
-            Ret = conns_sup:start_child(ConnSocket),
-            io:format("accept a socket. start_child Ret: ~p~n", [Ret]);
+            conns_sup:start_child(ConnSocket);
         {error, emfile} ->
             receive after 100 -> ok end;
         %% if error reasonis closed, crash
