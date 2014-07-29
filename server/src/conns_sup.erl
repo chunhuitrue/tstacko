@@ -42,7 +42,5 @@ init([]) ->
 
 
 start_child(ConnSocket) -> 
-    io:format("in start_child 1 ConnSocket: ~p~n", [ConnSocket]),
-    Ret = supervisor:start_child(?MODULE, [ConnSocket]),
-    io:format("in start_child Ret: ~p~n", [Ret]).
+    supervisor:start_child(?MODULE, [ConnSocket]).
 

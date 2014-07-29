@@ -23,23 +23,19 @@
 
 
 start_link(ConnSocket) ->
-    io:format("conn start link 1 ~n"),
     Pid = spawn_link(?MODULE, loop, [ConnSocket]),
     api:controlling_process(ConnSocket, Pid),
-    io:format("conn start link ~n"),
     {ok, Pid}.
 
 
-%% loop(ConnSocket) ->
-%%     io:format("process: ~p received data: ~p~n",[self(), ConnSocket]),
-%%     receive after 1000 -> ok end.
 loop(ConnSocket) ->
+    io:format("into loop~n"),
     case api:recv(ConnSocket, ?ECHO_SIZE) of
         {ok, Data} ->
-            io:format("process: ~p received data: ~p~n",[self(), Data]),
-            api:close(ConnSocket);
+            io:format("conn: ~p received data: ~p~n",[self(), Data]),
+            loop(ConnSocket);
         {error, Reason} ->
-            io:format("process: ~p received error: ~p~n",[self(), Reason]),
+            io:format("conn: ~p received error: ~p~n",[self(), Reason]),
             api:close(ConnSocket)
     end.
     
