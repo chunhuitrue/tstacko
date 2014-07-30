@@ -21,6 +21,7 @@
 -export([listen/2]).
 -export([recv/2]).
 -export([send/2]).
+-export([setopts/2]).
 -export([controlling_process/2]).
 -export([close/1]).
 
@@ -33,9 +34,7 @@ listen(Port, _Opts) ->
     gen_tcp:listen(Port, [{backlog, ?BACKLOG},
                           binary, 
                           {active, false}, 
-                          {packet, raw},
-                          {reuseaddr, true}, 
-                          {nodelay, true}]).
+                          {reuseaddr, true}]).
 
 
 recv(Socket, N) ->
@@ -52,3 +51,7 @@ controlling_process(Socket, Pid) ->
 
 close(Scoket) ->
     gen_tcp:close(Scoket).
+
+
+setopts(Socket, Options) ->
+    inet:setopts(Socket, Options).

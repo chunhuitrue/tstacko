@@ -24,18 +24,31 @@
 
 start_link(ConnSocket) ->
     Pid = spawn_link(?MODULE, loop, [ConnSocket]),
-    api:controlling_process(ConnSocket, Pid),
     {ok, Pid}.
 
 
-loop(ConnSocket) ->
-    case api:recv(ConnSocket, ?ECHO_SIZE) of
-        {ok, Data} ->
+%% loop(ConnSocket) ->
+%%     case api:recv(ConnSocket, 5) of
+%%         {ok, Data} ->
+%%             io:format("conn: ~p received data: ~p~n",[self(), Data]),
+%%             api:send(ConnSocket, Data),
+%%             loop(ConnSocket);
+%%         {error, Reason} ->
+%%             io:format("conn: ~p received error: ~p~n",[self(), Reason]),
+%%             api:close(ConnSocket)
+%%     end.
+
+loop(ConnSocket) ->    
+    api:setopts(ConnSocket, [{active, once}]),
+    receive
+        {tcp, ConnSocket, Data} ->
             io:format("conn: ~p received data: ~p~n",[self(), Data]),
             api:send(ConnSocket, Data),
             loop(ConnSocket);
-        {error, Reason} ->
-            io:format("conn: ~p received error: ~p~n",[self(), Reason]),
-            api:close(ConnSocket)
+        {tcp_closed, _Socket} ->
+            io:format("conn: ~p socket closed by peer.~n",[self()]),
+            ok;
+        _Any ->
+            io:format("conn: ~p any.~n",[self()])
     end.
-    
+                        
