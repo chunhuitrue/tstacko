@@ -13,15 +13,17 @@
 %% limitations under the License.
 
 
--module(tclient_app).
+-module(api).
 
--behaviour(application).
+-include("head.hrl").
 
--export([start/2, stop/1]).
+-export([connect/4]).
+-export([send/2]).
 
 
-start(_StartType, _StartArgs) ->
-    tclient_sup:start_link().
+connect(Address, Port, Options, Timeout) ->
+    gen_tcp:connect(Address, Port, Options, Timeout).
 
-stop(_State) ->
-    ok.
+
+send(Socket, Date) ->
+    gen_tcp:send(Socket, Date).

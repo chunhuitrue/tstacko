@@ -13,15 +13,7 @@
 %% limitations under the License.
 
 
--module(tclient_app).
-
--behaviour(application).
-
--export([start/2, stop/1]).
-
-
-start(_StartType, _StartArgs) ->
-    tclient_sup:start_link().
-
-stop(_State) ->
-    ok.
+-define(HOST, "localhost").
+-define(PORT, 2345).
+-define(CONN_TIMEOUT, 10000).
+-define(ECHO_SIZE, 8).

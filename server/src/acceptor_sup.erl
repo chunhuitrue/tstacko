@@ -32,7 +32,10 @@ start_link() ->
 
 
 init([]) ->
-    {ok, ListenSocket} = api:listen(?PORT, []),
+    {ok, ListenSocket} = api:listen(?PORT, [{backlog, ?BACKLOG},
+                                            binary, 
+                                            {active, false}, 
+                                            {reuseaddr, true}]),
 
     AcceptorSpec = [{{acceptor, N},
                      {acceptor, start_link, [ListenSocket]},

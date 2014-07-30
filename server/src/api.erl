@@ -30,11 +30,8 @@ accept(ListenSocket) ->
     gen_tcp:accept(ListenSocket).
 
 
-listen(Port, _Opts) ->
-    gen_tcp:listen(Port, [{backlog, ?BACKLOG},
-                          binary, 
-                          {active, false}, 
-                          {reuseaddr, true}]).
+listen(Port, Opts) ->
+    gen_tcp:listen(Port, Opts).
 
 
 recv(Socket, N) ->

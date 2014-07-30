@@ -31,20 +31,19 @@ loop(ConnSocket, Buf) ->
     api:setopts(ConnSocket, [{active, once}]),
     receive
         {tcp, ConnSocket, Data} ->
-            io:format("conn: ~p received data: ~p~n",[self(), Data]),
-
             RecvSize = byte_size(list_to_binary([Data | Buf])),
-            io:format("BufSize: ~p~n",[RecvSize]),
+            io:format("conn: ~p. RecvSize: ~p. received data: ~p~n", [self(), RecvSize, Data]),
             case RecvSize == ?ECHO_SIZE of
                 true ->
                     SendRet = api:send(ConnSocket, list_to_binary(lists:reverse([Data | Buf]))),
-                    io:format("SendRet: ~p echo_size: ~p~n",[SendRet, ?ECHO_SIZE]),
+                    io:format("SendRet: ~p echo_size: ~p~n", [SendRet, ?ECHO_SIZE]),
                     loop(ConnSocket, []);
                 false ->
                     loop(ConnSocket, [Data | Buf])
             end;
         {tcp_closed, _Socket} ->
-            io:format("conn: ~p socket closed by peer.~n",[self()]),
-            ok
+            io:format("conn: ~p socket closed by peer. to die~n", [self()]);
+        _Other ->
+            io:format("conn: ~p socket error. to die~n", [self()])
     end.
                         
