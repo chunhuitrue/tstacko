@@ -19,36 +19,32 @@
 
 
 -export([start_link/1]).
--export([loop/1]).
+-export([loop/2]).
 
 
 start_link(ConnSocket) ->
-    Pid = spawn_link(?MODULE, loop, [ConnSocket]),
+    Pid = spawn_link(?MODULE, loop, [ConnSocket, []]),
     {ok, Pid}.
 
 
-%% loop(ConnSocket) ->
-%%     case api:recv(ConnSocket, 5) of
-%%         {ok, Data} ->
-%%             io:format("conn: ~p received data: ~p~n",[self(), Data]),
-%%             api:send(ConnSocket, Data),
-%%             loop(ConnSocket);
-%%         {error, Reason} ->
-%%             io:format("conn: ~p received error: ~p~n",[self(), Reason]),
-%%             api:close(ConnSocket)
-%%     end.
-
-loop(ConnSocket) ->    
+loop(ConnSocket, Buf) ->    
     api:setopts(ConnSocket, [{active, once}]),
     receive
         {tcp, ConnSocket, Data} ->
             io:format("conn: ~p received data: ~p~n",[self(), Data]),
-            api:send(ConnSocket, Data),
-            loop(ConnSocket);
+
+            RecvSize = byte_size(list_to_binary([Data | Buf])),
+            io:format("BufSize: ~p~n",[RecvSize]),
+            case RecvSize == ?ECHO_SIZE of
+                true ->
+                    SendRet = api:send(ConnSocket, list_to_binary(lists:reverse([Data | Buf]))),
+                    io:format("SendRet: ~p echo_size: ~p~n",[SendRet, ?ECHO_SIZE]),
+                    loop(ConnSocket, []);
+                false ->
+                    loop(ConnSocket, [Data | Buf])
+            end;
         {tcp_closed, _Socket} ->
             io:format("conn: ~p socket closed by peer.~n",[self()]),
-            ok;
-        _Any ->
-            io:format("conn: ~p any.~n",[self()])
+            ok
     end.
                         
