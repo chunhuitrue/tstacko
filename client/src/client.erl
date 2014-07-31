@@ -27,7 +27,7 @@ start_link() ->
 
 
 start_connect() ->
-    case gen_tcp:connect(?HOST, ?PORT, [binary], ?CONN_TIMEOUT) of
+    case gen_tcp:connect(?HOST, ?PORT, [binary, {active, false}], ?CONN_TIMEOUT) of
         {ok, Socket} ->
             io:format("client: ~p connect ok. ~n", [self()]),
             send_recv(Socket);
@@ -45,6 +45,7 @@ send_recv(Socket) ->
 
 
 recv_echo(Socket, Buf) ->
+    api:setopts(Socket, [{active, once}]),
     receive
         {tcp, Socket, Data} ->
             RecvSize = byte_size(list_to_binary([Data | Buf])),

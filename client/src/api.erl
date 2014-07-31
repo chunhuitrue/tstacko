@@ -19,6 +19,7 @@
 
 -export([connect/4]).
 -export([send/2]).
+-export([setopts/2]).
 
 
 connect(Address, Port, Options, Timeout) ->
@@ -27,3 +28,7 @@ connect(Address, Port, Options, Timeout) ->
 
 send(Socket, Date) ->
     gen_tcp:send(Socket, Date).
+
+
+setopts(Socket, Options) ->
+    inet:setopts(Socket, Options).
