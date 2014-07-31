@@ -15,10 +15,11 @@
 
 -module(tclient_sup).
 
+-include("head.hrl").
+
 -behaviour(supervisor).
 
 -export([start_link/0]).
-
 -export([init/1]).
 
 %% Helper macro for declaring children of supervisor
@@ -30,5 +31,12 @@ start_link() ->
 
 
 init([]) ->
-    {ok, { {one_for_one, 5, 10}, []} }.
+    ClientSpec = [{{client, N},
+                   {client, start_link, []},
+                   permanent,
+                   brutal_kill,
+                   worker,
+                   []}
+                   || N <- lists:seq(1, ?CLIENT_NUM)],
+    {ok, {{one_for_one, 5, 10}, ClientSpec}}.
 

@@ -27,12 +27,14 @@ start_link() ->
 
 
 start_connect() ->
-    case api:connect(?HOST, ?PORT, [binary], ?CONN_TIMEOUT) of
+    case gen_tcp:connect(?HOST, ?PORT, [binary], ?CONN_TIMEOUT) of
         {ok, Socket} ->
             io:format("client: ~p connect ok. ~n", [self()]),
             send_recv(Socket);
         {error, Reason} ->
-            io:format("client: ~p connect error. reason: ~p. retry ~n", [self(), Reason]),
+            io:format("client: ~p connect error. reason: ~p. wait amoment and retry ~n", 
+                      [self(), Reason]),
+            timer:sleep(5000),
             start_connect()
     end.
     
@@ -51,6 +53,7 @@ recv_echo(Socket, Buf) ->
                 true ->
                     io:format("client: ~p echo ok. echo data: ~p~n", 
                               [self(), list_to_binary(lists:reverse([Data | Buf]))]),
+                    timer:sleep(1000),
                     send_recv(Socket);
                 false ->
                     recv_echo(Socket, [Data | Buf])

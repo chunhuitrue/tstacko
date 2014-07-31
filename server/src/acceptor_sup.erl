@@ -44,5 +44,4 @@ init([]) ->
                      worker,
                      []}
                     || N <- lists:seq(1, ?NUM_ACCEPTOR)],
-
     {ok, {{one_for_one, 5, 10}, AcceptorSpec}}.

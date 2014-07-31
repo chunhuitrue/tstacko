@@ -30,8 +30,8 @@ accept(ListenSocket) ->
     gen_tcp:accept(ListenSocket).
 
 
-listen(Port, Opts) ->
-    gen_tcp:listen(Port, Opts).
+listen(Port, Options) ->
+    gen_tcp:listen(Port, Options).
 
 
 recv(Socket, N) ->

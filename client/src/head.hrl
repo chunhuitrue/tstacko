@@ -13,7 +13,8 @@
 %% limitations under the License.
 
 
--define(HOST, "localhost").
+-define(HOST, "192.168.1.11").
 -define(PORT, 2345).
--define(CONN_TIMEOUT, 10000).
+-define(CONN_TIMEOUT, 5000).
 -define(ECHO_SIZE, 8).
+-define(CLIENT_NUM, 3).
